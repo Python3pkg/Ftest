@@ -27,13 +27,13 @@ if __name__ == '__main__':
 		value = [options.bnum, str(options.record), options.appid, options.accountid]
 		mask_data = ('mask:' + '_'.join(key), '_'.join(value))
 		r.set(*mask_data)
-		print("INFO: build mask number info success. %s --> %s" % mask_data)
+		print(("INFO: build mask number info success. %s --> %s" % mask_data))
 
 		mask_account = ("APP&ACCOUNT_STATUS:" + options.appid, options.appid_status)
 		r.set(*mask_account)
-		print("INFO: build mask account success. %s --> %s" % mask_account)
+		print(("INFO: build mask account success. %s --> %s" % mask_account))
 
-		print(0)
+		print((0))
 	except Exception as err:
-		print("ERR: " + str(err))
-		print(1)
+		print(("ERR: " + str(err)))
+		print((1))

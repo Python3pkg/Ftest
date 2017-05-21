@@ -33,7 +33,7 @@ if __name__ == '__main__':
 		stamp = ('SIPPHONE:TEL:STAMP:%s' % (options.dis_num), datetime.datetime.now().strftime("%Y%m%d%H%M%S")) #时间作为时戳
 		r.set(*stamp)
 		data.append(stamp)
-		print("INFO:build sipphone number stamp info success. %s --> %s" % stamp)
+		print(("INFO:build sipphone number stamp info success. %s --> %s" % stamp))
 
 		key = options.dis_num
 		mode = options.mode in ['first_ring'] and "0" or \
@@ -43,21 +43,21 @@ if __name__ == '__main__':
 			raise Exception("unsupported mode:%s" % (options.mode))
 
 		value1 = [options.accountid, options.appid, str(options.record), mode]
-		value2 = filter(lambda x: x != '', [eval('options.sipp_num%d' % x) for x in range(1, max_sipp_num + 1)])
+		value2 = [x for x in [eval('options.sipp_num%d' % x) for x in range(1, max_sipp_num + 1)] if x != '']
 		
 		number = ('SIPPHONE:TEL:%s' % (key), '_'.join(value1 + value2))
 		r.set(*number)
 		data.append(number)
-		print("INFO:build sipphone number info success. %s --> %s" % number)
+		print(("INFO:build sipphone number info success. %s --> %s" % number))
 
 		account = ("APP&ACCOUNT_STATUS:%s" % (options.appid), "0")
 		r.set(*account)
 		data.append(account)
-		print("INFO:build sipphone account success. %s --> %s" % account)
-		print(0)
+		print(("INFO:build sipphone account success. %s --> %s" % account))
+		print((0))
 	except Exception as err:
 		for x in data:
-			print("INFO:destroy data. %s" % (x[0]))
+			print(("INFO:destroy data. %s" % (x[0])))
 			r.delete(x[0])
-		print("ERR: " + str(err))
-		print(1)
+		print(("ERR: " + str(err)))
+		print((1))

@@ -27,24 +27,24 @@ if __name__ == '__main__':
 		if esl.connected():
 			# IMS地址
 			esl.api("global_setvar", "IMSaddr=%s:%s" % (options.route_host, options.route_port))
-			print("INFO:set IMSaddr: %s:%s" % (options.route_host, options.route_port))
+			print(("INFO:set IMSaddr: %s:%s" % (options.route_host, options.route_port)))
 
 			# 禁用400、95的呼叫
 			if options.forbidden_400_95:
 				esl.api("global_setvar", "sipphone_forbidden_call_400_95=%s" % (options.forbidden_400_95))
-				print("INFO:set sipphone_forbidden_call_400_95: %s" % (options.forbidden_400_95))
+				print(("INFO:set sipphone_forbidden_call_400_95: %s" % (options.forbidden_400_95)))
 			
 			# 数据更新间隔设为1秒
 			esl.api("global_setvar", "sipphone_update_period=1")
 			print("INFO:set sipphone_update_period: 1")
 			
 			esl.disconnect()
-			print(0)
+			print((0))
 		else:
-			print("ERR :connect freeswitch ESL failed. %s:%s@%s" % (options.host, options.port, options.password))
-			print(1)
+			print(("ERR :connect freeswitch ESL failed. %s:%s@%s" % (options.host, options.port, options.password)))
+			print((1))
 		
 	except Exception as err:
-		print("ERR: " + str(err))
-		print(1)
+		print(("ERR: " + str(err)))
+		print((1))
 

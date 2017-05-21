@@ -23,15 +23,15 @@ if __name__ == '__main__':
 		if esl.connected():
 			# IMS地址
 			esl.api("global_setvar", "IMSaddr=%s:%s" % (options.route_host, options.route_port))
-			print("INFO:set IMSaddr: %s:%s" % (options.route_host, options.route_port))
+			print(("INFO:set IMSaddr: %s:%s" % (options.route_host, options.route_port)))
 
 			esl.disconnect()
-			print(0)
+			print((0))
 		else:
-			print("ERR :connect freeswitch ESL failed. %s:%s@%s" % (options.host, options.port, options.password))
-			print(1)
+			print(("ERR :connect freeswitch ESL failed. %s:%s@%s" % (options.host, options.port, options.password)))
+			print((1))
 		
 	except Exception as err:
-		print("ERR: " + str(err))
-		print(1)
+		print(("ERR: " + str(err)))
+		print((1))
 

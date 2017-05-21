@@ -14,9 +14,9 @@ if __name__ == '__main__':
 		from neko import redisCluterBee
 		r = redisCluterBee(options.addrs, debug=False)
 		r.get('testing')	
-		print("INFO:connect redis success. addrs:%s" % (options.addrs))
-		print(0)
+		print(("INFO:connect redis success. addrs:%s" % (options.addrs)))
+		print((0))
 	except Exception as err:
-		print("ERR: " + str(err))
-		print(1)
+		print(("ERR: " + str(err)))
+		print((1))
 

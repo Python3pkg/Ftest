@@ -5,7 +5,7 @@ import subprocess
 import threading
 import time
 
-from treport import report, caseReport, caseProcReport
+from .treport import report, caseReport, caseProcReport
 from neko import color_str, ProcBar
 
 # yaml包
@@ -13,10 +13,10 @@ try:
 	import yaml
 except ImportError as err:
 	if "No module named" in str(err):
-		print(color_str("this script base on PyYaml, I will install it first, please wait a moment", "purple"))
+		print((color_str("this script base on PyYaml, I will install it first, please wait a moment", "purple")))
 		result = os.system("yum -y install python-pip && pip install --upgrade pip && pip install pyyaml")
 		if 0 != result:
-			print(color_str("sorry, there have some problems on auto-install PyYaml, please install it manually", "red"));
+			print((color_str("sorry, there have some problems on auto-install PyYaml, please install it manually", "red")));
 			sys.exit(result)
 		else:
 			import yaml
@@ -33,7 +33,7 @@ class caseCmd:
 			self.__action = cmd.get('action', {})
 			self.__description = (cmd.get('description', "") or "[default]")
 		except Exception as err:
-			raise SyntaxError, "config format is illegal, not find keywords 'action' or 'description' in " + self.__cmd_file
+			raise SyntaxError("config format is illegal, not find keywords 'action' or 'description' in " + self.__cmd_file)
 
 	def __enter__(self):
 		return self
@@ -74,9 +74,9 @@ class caseCmd:
 						p = config_dict.get(c, None)
 					# 配置参数不存在
 					if not p:
-						raise SyntaxError, "parse cmd failed, parameter '" + param[1:] + "' not find in config file"
+						raise SyntaxError("parse cmd failed, parameter '" + param[1:] + "' not find in config file")
 			except Exception as e:
-				raise SyntaxError, "parse cmd failed, parameter '" + param[1:] + "' format is illegal"
+				raise SyntaxError("parse cmd failed, parameter '" + param[1:] + "' format is illegal")
 		return p
 
 	def parse(self, config_dict):
@@ -89,9 +89,9 @@ class caseCmd:
 			params.append(self.__action.get("script", "").strip() or "")
 			parameter = self.__action.get("parameter", {}) or {}
 		except Exception as err:
-			raise SyntaxError, "config format is illegal, not find keywords 'script' or 'parameter' in " + self.__cmd_file
+			raise SyntaxError("config format is illegal, not find keywords 'script' or 'parameter' in " + self.__cmd_file)
 
-		for k, v in parameter.items():
+		for k, v in list(parameter.items()):
 			# 解析其中参数
 			try:
 				p = self.__parse_param(v, config_dict)
@@ -190,7 +190,7 @@ class case:
 		except Exception as e:
 			procrep.result(-1)
 			procrep.details("ERR :" + str(e))
-			print(color_str(str(e), 'red'))
+			print((color_str(str(e), 'red')))
 			return False, cmd, procrep, None
 
 		# 解析之后第一个必然是脚本的名字，后续的是参数
@@ -206,9 +206,9 @@ class case:
 		# 校验脚本是否存在
 		if not os.path.exists(f):
 			if not silence:
-				print(color_str(" ... ERROR", 'red'))
+				print((color_str(" ... ERROR", 'red')))
 				print("- details:")
-				print(color_str("-- ERR :" + f + " not exists", 'red'))
+				print((color_str("-- ERR :" + f + " not exists", 'red')))
 			procrep.details("ERR :" + f + " not exists")
 			return False, cmd, procrep, None
 
@@ -245,18 +245,18 @@ class case:
 				for detail in res[0].split('\n')[:-2]:
 					procrep.details(detail)
 				if not silence:
-					print("... " + color_str("OK", 'green'))
+					print(("... " + color_str("OK", 'green')))
 			else:
 				# 若执行失败，则输出脚本的执行过程
 				procrep.result(1)
 				details = res[0].split('\n')[:-2]
 				if not silence:
-					print("... " + color_str("ERROR", 'red'))
+					print(("... " + color_str("ERROR", 'red')))
 					if details:
 						print("- details:")
 				for detail in details:
 					if not silence:
-						print(color_str("-- " + detail, 'red' if 'ERR' in detail[:6] else 'sky_blue'))
+						print((color_str("-- " + detail, 'red' if 'ERR' in detail[:6] else 'sky_blue')))
 					procrep.details(detail)
 				return False, step + cnt
 
@@ -318,7 +318,7 @@ class case:
 			res = c['result']
 			if res is not None and res[0] is not None and '0' in res[0].split('\n')[-2:]:
 				if not silence:
-					print("PROCESS %02d " % (step + cnt) + c['cmd'].description().encode('utf-8') + "... " + color_str("OK", 'green'))
+					print(("PROCESS %02d " % (step + cnt) + c['cmd'].description().encode('utf-8') + "... " + color_str("OK", 'green')))
 				c['rep'].result(0)
 				#c['rep'].details("PROCESS %02d " % (step + cnt) + c['cmd'].description() + " OK")
 				for detail in res[0].split('\n')[:-2]:
@@ -331,13 +331,13 @@ class case:
 				if not silence:
 					
 					if details:
-						print("PROCESS %02d " % (step + cnt) + c['cmd'].description().encode('utf-8') + "... " + color_str("ERROR", 'red'))
+						print(("PROCESS %02d " % (step + cnt) + c['cmd'].description().encode('utf-8') + "... " + color_str("ERROR", 'red')))
 						print("- details:")
 					else:
-						print("PROCESS %02d " % (step + cnt) + c['cmd'].description().encode('utf-8') + "... " + color_str("ERROR (no details)", 'red'))
+						print(("PROCESS %02d " % (step + cnt) + c['cmd'].description().encode('utf-8') + "... " + color_str("ERROR (no details)", 'red')))
 				for detail in details:
 					if not silence:
-						print(color_str("-- " + detail, 'red' if 'ERR' in detail else 'sky_blue'))
+						print((color_str("-- " + detail, 'red' if 'ERR' in detail else 'sky_blue')))
 					c['rep'].details(detail)
 
 			# 尝试结束子进程
@@ -363,9 +363,9 @@ class case:
 		cnt, caserep, lang, silence, dup_time, dup_times = context["count"], context["case_rep"], context["lang"], context["silence"], context["dup_time"], context["dup_times"]
 		name = dup_time == 0 and self.__name or "%s(dup_%d)" % (self.__name, dup_time)
 		if not silence:
-			print(color_str("\ncase%d: %s testing%s... " % (cnt, name, ("(duplicated %d)" % dup_times) if dup_times > 1 and dup_time == 0 else ""), "purple"))
-			print(color_str("description: %s" % (self.__description), "yellow"))
-			print(color_str("expection  : %s" % (self.__expection), "sky_blue"))
+			print((color_str("\ncase%d: %s testing%s... " % (cnt, name, ("(duplicated %d)" % dup_times) if dup_times > 1 and dup_time == 0 else ""), "purple")))
+			print((color_str("description: %s" % (self.__description), "yellow")))
+			print((color_str("expection  : %s" % (self.__expection), "sky_blue")))
 
 		try:
 			# 报表收集信息开始
@@ -387,7 +387,7 @@ class case:
 						self.__run_teardown(step, caserep, silence)
 			else:
 				if not silence:
-					print(color_str("active     : %s" % (lang == "Chinese" and "否" or "no"), "red"))
+					print((color_str("active     : %s" % (lang == "Chinese" and "否" or "no"), "red")))
 
 			# 报表收集信息结束
 			caserep.end_time("now")
@@ -430,7 +430,7 @@ class caseMgr:
 				#print(self.__config)
 				return True
 		except Exception as e:
-			print(color_str(str(e), "red"))
+			print((color_str(str(e), "red")))
 			return False
 
 	def __load_case(self):
@@ -452,17 +452,17 @@ class caseMgr:
 				return True
 
 			# 遍历配置包中的测试套
-			for suit_dir, suit_file_list in p.items(): 
+			for suit_dir, suit_file_list in list(p.items()): 
 				for suit_file in suit_file_list if suit_file_list else []:
 					suit_path = os.path.join(root, suit_dir, suit_file)
 					if not os.path.exists(suit_path):
-						print(color_str("file " + suit_path + " is not exists", "yellow"))
+						print((color_str("file " + suit_path + " is not exists", "yellow")))
 						continue
 					try:
 						with open(suit_path) as f:
 							s = yaml.load(f)
 					except Exception as err:
-						print(color_str(str(err), "red"))
+						print((color_str(str(err), "red")))
 						continue
 					# 配置中的测试套描述
 					suit_description = s.pop("description") if "description" in s else ""
@@ -470,17 +470,17 @@ class caseMgr:
 					if not s:
 						continue
 					# 遍历配置套中的测试用例
-					for case_dir, case_file_list in s.items():
+					for case_dir, case_file_list in list(s.items()):
 						for case_file in case_file_list if case_file_list else []:
 							case_path = os.path.join(root, case_dir, case_file)
 							if not os.path.exists(case_path):
-								print(color_str("file " + case_path + " is not exists, please check file:" + suit_path, "yellow"))
+								print((color_str("file " + case_path + " is not exists, please check file:" + suit_path, "yellow")))
 								continue
 							try:
 								with open(case_path) as f:
 									c = yaml.load(f)
 							except Exception as err:
-								print(color_str(str(err), "red"))
+								print((color_str(str(err), "red")))
 								continue
 							#print(c)
 							self.__case.append({"case": c, "case_path":case_path, \
@@ -489,7 +489,7 @@ class caseMgr:
 								})
 			return True
 		except Exception as e:
-			print(color_str(str(e), "red"))
+			print((color_str(str(e), "red")))
 			return False
 		
 
@@ -556,11 +556,11 @@ class caseMgr:
 			
 			total, success, success_list, failed, failed_list, error, error_list, unactive, unactive_list = rep.statistics()
 			
-			print(color_str("\n%s" % (lang == "Chinese" and "统计" or "statistics")))
-			print(color_str("==============="))
-			print(color_str(" {0:<14}:{1}".format("%s" % (lang == "Chinese" and "成功" or "success"), success), "green" if success else "white"))
-			print(color_str(" {0:<14}:{1}".format("%s" % (lang == "Chinese" and "失败" or "failed"), failed), "red" if failed else "white"))
-			print(color_str(" {0:<14}:{1}".format("%s" % (lang == "Chinese" and "错误" or "error"), error), "red" if error else "white"))
-			print(color_str(" {0:<14}:{1}".format("%s" % (lang == "Chinese" and "未激活" or "unactive"), unactive), "red" if unactive else "white"))
-			print(color_str("---------------"))
-			print(color_str(" {0:<14}:{1}".format("%s" % (lang == "Chinese" and "总计" or "total"), total), "sky_blue"))
+			print((color_str("\n%s" % (lang == "Chinese" and "统计" or "statistics"))))
+			print((color_str("===============")))
+			print((color_str(" {0:<14}:{1}".format("%s" % (lang == "Chinese" and "成功" or "success"), success), "green" if success else "white")))
+			print((color_str(" {0:<14}:{1}".format("%s" % (lang == "Chinese" and "失败" or "failed"), failed), "red" if failed else "white")))
+			print((color_str(" {0:<14}:{1}".format("%s" % (lang == "Chinese" and "错误" or "error"), error), "red" if error else "white")))
+			print((color_str(" {0:<14}:{1}".format("%s" % (lang == "Chinese" and "未激活" or "unactive"), unactive), "red" if unactive else "white")))
+			print((color_str("---------------")))
+			print((color_str(" {0:<14}:{1}".format("%s" % (lang == "Chinese" and "总计" or "total"), total), "sky_blue")))

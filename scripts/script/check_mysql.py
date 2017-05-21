@@ -21,13 +21,13 @@ if __name__ == '__main__':
 	        password = options.password,
 	        dbname = options.dbname)
 		if conn:
-			print("INFO:connect mysql success. %s:%d@%s:%s->%s" % 
-				(options.host, options.port, options.user, options.password, options.dbname))
-			print(0)
+			print(("INFO:connect mysql success. %s:%d@%s:%s->%s" % 
+				(options.host, options.port, options.user, options.password, options.dbname)))
+			print((0))
 
 	except Exception as err:
 		print(err)
-		print("ERR :connect mysql failed. %s:%d@%s:%s->%s" % 
-			(options.host, options.port, options.user, options.password, options.dbname))
-		print(1)
+		print(("ERR :connect mysql failed. %s:%d@%s:%s->%s" % 
+			(options.host, options.port, options.user, options.password, options.dbname)))
+		print((1))
 	

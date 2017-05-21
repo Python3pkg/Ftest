@@ -139,7 +139,7 @@ class Rn:
 
 	def __rn_realm_rule2(self, status, number_type, operators, area_prov_code):
 		if self.debug:
-			print(status != None, number_type, operators, area_prov_code)
+			print((status != None, number_type, operators, area_prov_code))
 		realm2_4 = ""
 		realm3_5 = ""
 		__realm2_4 = number_type == "telephone" and self.__ct or self.__cmcc
@@ -169,7 +169,7 @@ class Rn:
 		realm4, realm5 = "", ""
 
 		if self.debug:
-			print(caller_num_type, caller_num_section, callee_num_type, callee_num_section)
+			print((caller_num_type, caller_num_section, callee_num_type, callee_num_section))
 
 		if caller_num_type in ["telephone", "mobilephone"]:
 			if caller_num_type == "mobilephone" and callee_num_type == "mobilephone":
@@ -196,7 +196,7 @@ class Rn:
 			realm4, realm5 = self.__rn_realm_rule2(callee_num_section, callee_num_type, \
 				caller_num_section.get("operator", ""), caller_num_section.get("areacode", ""))
 		if self.debug:
-			print(realm1, realm2, realm3, realm4, realm5)
+			print((realm1, realm2, realm3, realm4, realm5))
 		return realm1 + realm2 + realm3 + realm4 + realm5
 
 	# 正常生成RN码
@@ -216,7 +216,7 @@ class Rn:
 
 	def get(self, bus_code, appid, caller, callee, mode = "normal", trunkid = ""):
 		if self.debug:
-			print(bus_code, appid, caller, callee, mode, trunkid)
+			print((bus_code, appid, caller, callee, mode, trunkid))
 		if mode in ["normal"]:
 			return self.__normal(bus_code, appid, caller, callee)
 		elif mode in ["specify"]:
@@ -241,7 +241,7 @@ if __name__ == '__main__':
 	(options, args) = parser.parse_args()
 	
 	rn = Rn(options.host, options.port, options.user, options.password, options.dbname, debug=True)
-	print(rn.get(options.bus_type, options.appid, options.caller, options.callee))
+	print((rn.get(options.bus_type, options.appid, options.caller, options.callee)))
 	
 	
 

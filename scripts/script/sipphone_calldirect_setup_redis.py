@@ -32,7 +32,7 @@ if __name__ == '__main__':
 
 		stamp = ('SIPPHONE:SIP:STAMP:%s' % (options.sipp_num), datetime.datetime.now().strftime("%Y%m%d%H%M%S")) #时间作为时戳
 		r.set(*stamp)
-		print("INFO:build sipphone number stamp info success. %s --> %s" % stamp)
+		print(("INFO:build sipphone number stamp info success. %s --> %s" % stamp))
 		data.append(stamp)
 
 		key = options.sipp_num
@@ -40,17 +40,17 @@ if __name__ == '__main__':
 		value = [options.accountid, options.appid, str(options.record), options.dis_num, str(function), options.home_area]
 		sipphone = ('SIPPHONE:SIP:%s' % (key), '_'.join(value))
 		r.set(*sipphone)
-		print("INFO:build sipphone number info success. %s --> %s" % sipphone)
+		print(("INFO:build sipphone number info success. %s --> %s" % sipphone))
 		data.append(sipphone)
 
 		account = ("APP&ACCOUNT_STATUS:%s" % (options.appid), "0")
 		r.set(*account)
 		data.append(account)
-		print("INFO:build sipphone account success. %s --> %s" % account)
-		print(0)
+		print(("INFO:build sipphone account success. %s --> %s" % account))
+		print((0))
 	except Exception as err:
 		for x in data:
-			print("INFO:destroy data. %s" % (x[0]))
+			print(("INFO:destroy data. %s" % (x[0])))
 			r.delete(x[0])
-		print("ERR: " + str(err))
-		print(1)
+		print(("ERR: " + str(err)))
+		print((1))

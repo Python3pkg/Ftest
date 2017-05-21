@@ -88,31 +88,31 @@ if __name__ == '__main__':
 				if options.caller_num == caller_num and options.callee_num == callee_num:
 					
 					if options.is_call.lower() not in ['yes']:
-						print("ERR :recv target call %s --> %s" % (caller_num, callee_num))
+						print(("ERR :recv target call %s --> %s" % (caller_num, callee_num)))
 						self.__message_flow["recv call"]["result"] = False
 						return "end"
 					else:
-						print("INFO:recv target call %s --> %s" % (caller_num, callee_num))
+						print(("INFO:recv target call %s --> %s" % (caller_num, callee_num)))
 
 					self.__message_flow["recv call"]["result"] = True
 					self.__call["uuid"] = uuid
 
 					if options.ring_time != -1:
-						print("INFO:send ring after %ds" % (options.ring_time))
+						print(("INFO:send ring after %ds" % (options.ring_time)))
 						time.sleep(options.ring_time)
 						self.esl().execute("ring_ready", "", uuid)
 						#self.esl().execute("playback", "/usr/local/freeswitch/sounds/music/8000/suite-espanola-op-47-leyenda.wav", uuid)
 						self.__message_flow["ring"]["result"] = True
 
 					if options.answer_time != -1:
-						print("INFO:send answer after %ds" % (options.answer_time))
+						print(("INFO:send answer after %ds" % (options.answer_time)))
 						time.sleep(options.answer_time)
 						self.esl().execute("answer", "", uuid)
 						#self.esl().execute("playback", "/usr/local/freeswitch/sounds/music/8000/suite-espanola-op-47-leyenda.wav", uuid)
 						self.__message_flow["answer"]["result"] = True
 
 					if options.hangup_time != -1:
-						print("INFO:send hangup after %ds" % (options.hangup_time))
+						print(("INFO:send hangup after %ds" % (options.hangup_time)))
 						time.sleep(options.hangup_time)
 						self.esl().execute("hangup", "", uuid)
 						self.__message_flow["hangup"]["result"] = True
@@ -130,13 +130,13 @@ if __name__ == '__main__':
 		# 校验整个呼叫过程中的错误
 		def complete_check(self):
 			proc_describe = ""
-			seq = sys.maxint
-			for msg, context in self.__message_flow.items():
+			seq = sys.maxsize
+			for msg, context in list(self.__message_flow.items()):
 				if not context["result"] and context["sequence"] < seq:
 					proc_describe = context["describe"]
 			else:
 				if proc_describe:
-					print("ERR :process '%s' result is not OK" % (proc_describe))
+					print(("ERR :process '%s' result is not OK" % (proc_describe)))
 					return False
 				else:
 					return True
@@ -144,9 +144,9 @@ if __name__ == '__main__':
 	callee = CalleeEvent(options.host, options.port, options.password)
 	callee.run(options.timeout)
 	if callee.complete_check():
-		print(0)
+		print((0))
 	else:
-		print(1)
+		print((1))
 
 
 

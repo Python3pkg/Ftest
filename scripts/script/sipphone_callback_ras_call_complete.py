@@ -159,7 +159,7 @@ if __name__ == '__main__':
 					self.__A['caller_num'] = caller_num
 					self.__A['callee_num'] = callee_num
 					self.__A['sip_call_id'] = sip_call_id
-					print("INFO:locking A call success. uuid:%s, caller:%s, callee:%s" % (uuid, caller_num, callee_num))
+					print(("INFO:locking A call success. uuid:%s, caller:%s, callee:%s" % (uuid, caller_num, callee_num)))
 					self.__message_flow["recv A"]["result"] = True
 			elif call_dir in ['outbound']:
 				uuid_other = event.getHeader("Other-Leg-Unique-ID")
@@ -176,7 +176,7 @@ if __name__ == '__main__':
 					self.__B['callee_num'] = callee_num
 					self.__B['sip_call_id'] = sip_call_id
 					self.__A['other_uuid'] = uuid
-					print("INFO:matched B call success. uuid:%s, caller:%s, callee:%s" % (uuid, caller_num, callee_num))
+					print(("INFO:matched B call success. uuid:%s, caller:%s, callee:%s" % (uuid, caller_num, callee_num)))
 					self.__message_flow["send B"]["result"] = True
 					
 					# 检查RN是否生成正确
@@ -186,11 +186,11 @@ if __name__ == '__main__':
 						self.__B['rn'] = test_rn
 						ref_rn = self.__get_rn(self.__bus_code, options.appid, caller_num, callee_num)
 						if ref_rn != test_rn:
-							print("ERR :check RN failed... test_rn:%s, ref_rn:%s, bus_code:%s, appid:%s" % 
-								(test_rn, ref_rn, self.__bus_code, options.appid))
+							print(("ERR :check RN failed... test_rn:%s, ref_rn:%s, bus_code:%s, appid:%s" % 
+								(test_rn, ref_rn, self.__bus_code, options.appid)))
 							return "end"
 						else:
-							print("INFO:check RN success. rn:%s" % (ref_rn))
+							print(("INFO:check RN success. rn:%s" % (ref_rn)))
 							self.__message_flow["check RN"]["result"] = True
 					else:
 						print("ERR :not find RN from header:variable_sip_invite_tel_params")
@@ -205,7 +205,7 @@ if __name__ == '__main__':
 						except Exception as err:
 							print(err)
 							return "end"
-						print("INFO:check billing success. billing:%s" % (test_billing))
+						print(("INFO:check billing success. billing:%s" % (test_billing)))
 						self.__message_flow["check billing"]["result"] = True
 					else:
 						print("ERR :not find billing from header:variable_sip_h_P-Access-Network-Info")
@@ -229,7 +229,7 @@ if __name__ == '__main__':
 					except Exception as err:
 						print(err)
 						return "end"
-					print("INFO:check billing success. billing:%s" % (test_billing))
+					print(("INFO:check billing success. billing:%s" % (test_billing)))
 					self.__message_flow["check billing"]["result"] = True
 				else:
 					print("ERR :not find billing from header:variable_P-Access-Network-Info")
@@ -275,10 +275,10 @@ if __name__ == '__main__':
 
 			reason = event.getHeader("variable_P-ras-reason")
 			if reason and str(options.reason_code) != reason:
-				print("ERR :hangup failed. reason:%s is not %s" % (reason, options.reason_code))
+				print(("ERR :hangup failed. reason:%s is not %s" % (reason, options.reason_code)))
 				return "end"
 
-			print("INFO:hangup success. reason:%s" % (reason))
+			print(("INFO:hangup success. reason:%s" % (reason)))
 			self.__message_flow["hangup"]["result"] = True
 
 			if options.reason_code:
@@ -293,7 +293,7 @@ if __name__ == '__main__':
 
 			if not options.record:
 				print("ERR : not need record")
-				print(1)
+				print((1))
 				return "end"
 
 			# 检查是否有生成录音文件
@@ -304,14 +304,14 @@ if __name__ == '__main__':
 				ssh = Ssh(options.host)
 				stdin, stdout, stderr = ssh.exec_command('ls -l ' + record_file_path)
 				if not stdout.readlines():
-					print("ERR :check record file not exists. %s" % (record_file_path))
-					print(1)
+					print(("ERR :check record file not exists. %s" % (record_file_path)))
+					print((1))
 					return "end"
 				else:
-					print("INFO:check record file exists. %s" % (record_file_path))
+					print(("INFO:check record file exists. %s" % (record_file_path)))
 			except Exception as err:
-				print("ERR :" + str(err))
-				print(1)
+				print(("ERR :" + str(err)))
+				print((1))
 				return "end"
 
 		def __check_hangup_notify_item(self, event, header_name, ref, err = ""):
@@ -384,13 +384,13 @@ if __name__ == '__main__':
 		# 校验整个呼叫过程中的错误
 		def complete_check(self):
 			proc_describe = ""
-			seq = sys.maxint
-			for msg, context in self.__message_flow.items():
+			seq = sys.maxsize
+			for msg, context in list(self.__message_flow.items()):
 				if not context["result"] and context["sequence"] < seq:
 					proc_describe = context["describe"]
 			else:
 				if proc_describe:
-					print("ERR :process '%s' result is not OK" % (proc_describe))
+					print(("ERR :process '%s' result is not OK" % (proc_describe)))
 					return False
 				else:
 					return True
@@ -398,7 +398,7 @@ if __name__ == '__main__':
 	sipphone = Event(options.host, options.port, options.password)
 	sipphone.run(options.timeout)
 	if sipphone.complete_check():
-		print(0)
+		print((0))
 	else:
-		print(1)
+		print((1))
 

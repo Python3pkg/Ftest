@@ -9,10 +9,10 @@ try:
 	import xlwt
 except ImportError as err:
 	if "No module named" in str(err):
-		print(color_str("this script base on xlwt, I will install it first, please wait a moment", "purple"))
+		print((color_str("this script base on xlwt, I will install it first, please wait a moment", "purple")))
 		result = os.system("yum -y install python-pip && pip install --upgrade pip && pip install xlwt")
 		if 0 != result:
-			print(color_str("sorry, there have some problems on auto-install PyYaml, please install it manually", "red"));
+			print((color_str("sorry, there have some problems on auto-install PyYaml, please install it manually", "red")));
 			sys.exit(result)
 		else:
 			import xlwt
@@ -136,8 +136,8 @@ class caseProcReport(repComm):
 		else:
 			return self.__isrun
 
-	def result(self, result=sys.maxint):
-		if result != sys.maxint:
+	def result(self, result=sys.maxsize):
+		if result != sys.maxsize:
 			self.__result = result
 		else:
 			return self.__result
@@ -356,27 +356,27 @@ class report(repComm):
 	def __rep_debug(self):
 		
 		# 总体描述
-		print("\nTest Task '" + self.name() + "' duration:" + self.duration_time() + " from " + self.start_time() + " to " + self.end_time())
+		print(("\nTest Task '" + self.name() + "' duration:" + self.duration_time() + " from " + self.start_time() + " to " + self.end_time()))
 
 		# 统计执行总体情况
 		total, success, success_list, failed, failed_list, error, error_list, unactive, unactive_list = self.statistics()
 
-		print("{0:^20}".format("success") + "{0:^20}".format("failed") + "{0:^20}".format("error") + "{0:^20}".format("total"))
-		print("{0:^20}".format(success) + "{0:^20}".format(failed) + "{0:^20}".format(error) + "{0:^20}".format(total))
+		print(("{0:^20}".format("success") + "{0:^20}".format("failed") + "{0:^20}".format("error") + "{0:^20}".format("total")))
+		print(("{0:^20}".format(success) + "{0:^20}".format(failed) + "{0:^20}".format(error) + "{0:^20}".format(total)))
 		return
 		for case in self.__case_list:
-			print(case.name()) # 测试用例名字
-			print(case.description()) # 测试描述
-			print(case.packet_path() + " --> " + case.suit_path() + " --> " + case.case_path()) # 测试的来源路径
-			print(case.start_time() + " --> " + case.end_time()) # 测试起止时间
+			print((case.name())) # 测试用例名字
+			print((case.description())) # 测试描述
+			print((case.packet_path() + " --> " + case.suit_path() + " --> " + case.case_path())) # 测试的来源路径
+			print((case.start_time() + " --> " + case.end_time())) # 测试起止时间
 			print("--------------")
 			for proc in case.procs():
-				print(proc.description()) # 测试过程描述
-				print(proc.stage()) # 测试过程阶段
-				print(proc.result()) # 测试结果
-				print(proc.start_time() + " --> " + proc.end_time()) # 测试过程起止时间
-				print(proc.script()) # 测试过程执行脚本
-				print(proc.details()) # 测试过程详细信息
+				print((proc.description())) # 测试过程描述
+				print((proc.stage())) # 测试过程阶段
+				print((proc.result())) # 测试结果
+				print((proc.start_time() + " --> " + proc.end_time())) # 测试过程起止时间
+				print((proc.script())) # 测试过程执行脚本
+				print((proc.details())) # 测试过程详细信息
 				print("###################")
 
 	def __create_xls_sheet(self, wb, name):
@@ -659,7 +659,7 @@ class report(repComm):
 				# 合并相同的stage
 				#print(stage_context)
 				merge_row_list = []
-				for stage, row_list in stage_context.items():
+				for stage, row_list in list(stage_context.items()):
 					start, end = 0, 0 
 					begin = True
 					for row in row_list:
@@ -914,17 +914,17 @@ class report(repComm):
 		#加邮件头
 		msg['from'] = sender
 		msg['subject'] = Header('%s-%s(%s)' % (self.__summary_title, self.name(), self.start_time()),'UTF-8')
-		msg['to'] = ";".join(delivers.values())
+		msg['to'] = ";".join(list(delivers.values()))
 		#发送邮件
 		try:
 			server = smtplib.SMTP_SSL(smtp, 465)
 			server.login(user, password)
-			server.sendmail(msg['from'], delivers.values(), msg.as_string())
+			server.sendmail(msg['from'], list(delivers.values()), msg.as_string())
 			server.quit()
 			if not silence:
-				p.stop(color_str("OK", "green") + " %s " % (self.__language == "Chinese" and "投递给" or "delivers:") + str(["%s<%s>" % (name, email) for name, email in delivers.items()]))
+				p.stop(color_str("OK", "green") + " %s " % (self.__language == "Chinese" and "投递给" or "delivers:") + str(["%s<%s>" % (name, email) for name, email in list(delivers.items())]))
 		except smtplib.SMTPRecipientsRefused:
-			print(color_str('Recipient refused', "red"))
+			print((color_str('Recipient refused', "red")))
 		except smtplib.SMTPAuthenticationError as err:
 			s = ""
 			for x in err:
@@ -936,11 +936,11 @@ class report(repComm):
 				if not silence:
 					p.stop(color_str(s, "red"))
 				else:
-					print(color_str(s, "red"))
+					print((color_str(s, "red")))
 		except smtplib.SMTPSenderRefused:
-			print(color_str('Sender refused', "red"))
+			print((color_str('Sender refused', "red")))
 		except smtplib.SMTPException as e:
-		    print (color_str(e.message, "red"))
+		    print((color_str(e.message, "red")))
 
 			
 

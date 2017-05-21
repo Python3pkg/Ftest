@@ -70,7 +70,7 @@ if __name__ == '__main__':
 			uuid = event.getHeader("unique-id")
 			session_id = event.getHeader("variable_session_id")
 			if call_uuid == uuid:
-				print("INFO:generated a call %s --> %s" % (event.getHeader("Caller-Caller-ID-Number"), event.getHeader("Caller-Destination-Number")))
+				print(("INFO:generated a call %s --> %s" % (event.getHeader("Caller-Caller-ID-Number"), event.getHeader("Caller-Destination-Number"))))
 
 		def channel_progress(self, event):
 			uuid = event.getHeader("unique-id")
@@ -98,7 +98,7 @@ if __name__ == '__main__':
 			session_id = event.getHeader("variable_session_id")
 			if call_uuid == uuid:
 				print("INFO:call hangup")
-				print(0)
+				print((0))
 				return "end"
 
 	class callEventThread(threading.Thread):

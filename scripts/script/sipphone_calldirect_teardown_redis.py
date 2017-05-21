@@ -22,18 +22,18 @@ if __name__ == '__main__':
 
 		stamp = 'SIPPHONE:SIP:STAMP:%s' % (options.sipp_num)
 		r.delete(stamp)
-		print("INFO:destroy sipphone number stamp info success. %s" % (stamp))
+		print(("INFO:destroy sipphone number stamp info success. %s" % (stamp)))
 
 		sipphone = 'SIPPHONE:SIP:%s' % (options.sipp_num)
 		r.delete(sipphone)
-		print("INFO:destroy sipphone number info success. %s" % (sipphone))
+		print(("INFO:destroy sipphone number info success. %s" % (sipphone)))
 
 		if options.appid:
 			account = "APP&ACCOUNT_STATUS:%s" % (options.appid)
 			r.delete(account)
-			print("INFO:destroy sipphone account success. %s" % (account))
+			print(("INFO:destroy sipphone account success. %s" % (account)))
 		
-		print(0)
+		print((0))
 	except Exception as err:
-		print("ERR: " + str(err))
-		print(1)
+		print(("ERR: " + str(err)))
+		print((1))

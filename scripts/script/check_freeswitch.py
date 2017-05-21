@@ -15,14 +15,14 @@ if __name__ == '__main__':
 		import neko
 		from neko import ESLEvent
 		event = ESLEvent(options.host, options.port, options.password)
-		print(neko.__file__)
+		print((neko.__file__))
 		if event and event.is_connected():
-			print("INFO:connect freeswitch ESL success. %s:%s@%s" % (options.host, options.port, options.password))
-			print(0)
+			print(("INFO:connect freeswitch ESL success. %s:%s@%s" % (options.host, options.port, options.password)))
+			print((0))
 		else:
-			print("ERR :connect freeswitch ESL failed. %s:%s@%s" % (options.host, options.port, options.password))
-			print(1)
+			print(("ERR :connect freeswitch ESL failed. %s:%s@%s" % (options.host, options.port, options.password)))
+			print((1))
 	except Exception as err:
-		print("ERR: " + str(err))
-		print(1)
+		print(("ERR: " + str(err)))
+		print((1))
 

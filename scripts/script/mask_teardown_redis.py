@@ -22,13 +22,13 @@ if __name__ == '__main__':
 		key = [options.anum, options.hnum]
 		mask_data = 'mask:' + '_'.join(key)
 		r.delete(mask_data)
-		print("INFO:destroy mask number info success. " + mask_data)
+		print(("INFO:destroy mask number info success. " + mask_data))
 
 		mask_account = "APP&ACCOUNT_STATUS:" + options.appid
 		r.delete(mask_account)
-		print("INFO:destroy mask account success. " + mask_account)
+		print(("INFO:destroy mask account success. " + mask_account))
 		
-		print(0)
+		print((0))
 	except Exception as err:
-		print("ERR: " + str(err))
-		print(1)
+		print(("ERR: " + str(err)))
+		print((1))

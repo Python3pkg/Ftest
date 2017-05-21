@@ -70,7 +70,7 @@ if __name__ == '__main__':
 				from number import Rn
 				rn = Rn(options.mysql_host, options.mysql_port, options.mysql_user, options.mysql_password, options.mysql_dbname)
 				return rn.get(bus_code, appid, caller, callee)
-			except Exception,err:
+			except Exception as err:
 				return err
 
 		def __check_billing(self, test_billing):
@@ -78,66 +78,66 @@ if __name__ == '__main__':
 			#"33e9;MASK!C!63348e574ff14cf484fcfeb137e38be8!!MTEzZDk4MzA0ZmUwMGQzMzdkYTkzNGYx!1!18682099276!075522453654!18589034543!075522453654!0!20161128115204"
 			b = test_billing[1:-1].split('!')
 			if b[0] != "33e9;MASK":
-				print("ERR :billing check failed... test:%s ref:%s" % (b[0], "33e9;MASK"))
+				print(("ERR :billing check failed... test:%s ref:%s" % (b[0], "33e9;MASK")))
 				return False
 
 			if b[1] != "C":
-				print("ERR :billing check failed... test:%s ref:%s" % (b[1], "C"))
+				print(("ERR :billing check failed... test:%s ref:%s" % (b[1], "C")))
 				return False
 
 			# APPID
 			if b[2] != options.appid:
-				print("ERR :billing appid check failed... test:%s ref:%s" % (b[2], options.appid()))
+				print(("ERR :billing appid check failed... test:%s ref:%s" % (b[2], options.appid())))
 				return False
 
 			# Acall SIP Call-ID: 截断成32位
 			if b[4] != self.__A['sip_call_id'][:32]:
-				print("ERR :billing sip Call-ID check failed... test:%s ref:%s" % (b[4], self.__A['sip_call_id'][:32]))
+				print(("ERR :billing sip Call-ID check failed... test:%s ref:%s" % (b[4], self.__A['sip_call_id'][:32])))
 				return False
 
 			# 录音标识(和配置的一样)
 			if b[5] != str(options.record):
-				print("ERR :billing record check failed... test:%s ref:%s" % (b[5], options.record))
+				print(("ERR :billing record check failed... test:%s ref:%s" % (b[5], options.record)))
 				return False
 
 			# 主叫号码(A号码)
 			if b[6] != options.anum:
-				print("ERR :billing number check failed... test:%s ref:%s" % (b[6], options.anum))
+				print(("ERR :billing number check failed... test:%s ref:%s" % (b[6], options.anum)))
 				return False
 
 			# 隐私号码(隐私号码)
 			if b[7] != options.hnum:
-				print("ERR :billing number check failed... test:%s ref:%s" % (b[7], options.hnum))
+				print(("ERR :billing number check failed... test:%s ref:%s" % (b[7], options.hnum)))
 				return False
 
 			# 被叫号码(B号码)
 			if b[8] != options.bnum:
-				print("ERR :billing number check failed... test:%s ref:%s" % (b[8], options.bnum))
+				print(("ERR :billing number check failed... test:%s ref:%s" % (b[8], options.bnum)))
 				return False
 
 			# 被叫显号(隐私号码)
 			if b[9] != options.hnum:
-				print("ERR :billing number check failed... test:%s ref:%s" % (b[9], options.hnum))
+				print(("ERR :billing number check failed... test:%s ref:%s" % (b[9], options.hnum)))
 				return False
 
 			# 呼叫状态(成功/失败)
 			if b[10] != "0":
-				print("ERR :billing call status check failed... test:%s ref:%s" % (b[10], "0"))
+				print(("ERR :billing call status check failed... test:%s ref:%s" % (b[10], "0")))
 				return False
 
 			# 录音时间
 			self.__B['call_time'] = b[11]
-			print("INFO:billing call(record) time:%s" % (b[11]))
+			print(("INFO:billing call(record) time:%s" % (b[11])))
 
 			# 呼叫次数
 			if b[12] != "1":
-				print("ERR :billing call counter check failed... test:%s ref:%s" % (b[12], "1"))
+				print(("ERR :billing call counter check failed... test:%s ref:%s" % (b[12], "1")))
 				return False
 
 			# SIPPHONE呼叫情况
 
 			# 中继ID
-			print("INFO:billing trunk id:%s" % (b[14]))
+			print(("INFO:billing trunk id:%s" % (b[14])))
 				
 			return True
 
@@ -180,7 +180,7 @@ if __name__ == '__main__':
 					self.__A['caller_num'] = caller_num
 					self.__A['callee_num'] = callee_num
 					self.__A['sip_call_id'] = sip_call_id
-					print("INFO:locking A call success. uuid:%s, caller:%s, callee:%s" % (uuid, caller_num, callee_num))
+					print(("INFO:locking A call success. uuid:%s, caller:%s, callee:%s" % (uuid, caller_num, callee_num)))
 					self.__message_flow["recv A"]["result"] = True
 			elif call_dir in ['outbound']:
 				uuid_other = event.getHeader("Other-Leg-Unique-ID")
@@ -196,7 +196,7 @@ if __name__ == '__main__':
 					self.__B['callee_num'] = callee_num
 					self.__B['sip_call_id'] = sip_call_id
 					self.__A['other_uuid'] = uuid
-					print("INFO:matched B call success. uuid:%s, caller:%s, callee:%s" % (uuid, caller_num, callee_num))
+					print(("INFO:matched B call success. uuid:%s, caller:%s, callee:%s" % (uuid, caller_num, callee_num)))
 					self.__message_flow["send B"]["result"] = True
 					
 					# 检查RN是否生成正确
@@ -206,16 +206,16 @@ if __name__ == '__main__':
 						self.__B['rn'] = test_rn
 						ref_rn = self.__get_rn(self.__bus_code, options.appid, caller_num, callee_num)
 						if ref_rn != test_rn:
-							print("ERR :check RN failed... test_rn:%s, ref_rn:%s, bus_code:%s, appid:%s" % 
-								(test_rn, ref_rn, self.__bus_code, options.appid))
-							print(1)
+							print(("ERR :check RN failed... test_rn:%s, ref_rn:%s, bus_code:%s, appid:%s" % 
+								(test_rn, ref_rn, self.__bus_code, options.appid)))
+							print((1))
 							return "end"
 						else:
-							print("INFO:check RN success. rn:%s" % (ref_rn))
+							print(("INFO:check RN success. rn:%s" % (ref_rn)))
 							self.__message_flow["check RN"]["result"] = True
 					else:
 						print("ERR :not find RN from header:variable_sip_invite_tel_params")
-						print(1)
+						print((1))
 						return "end"
 
 					# 校验计费字段
@@ -224,14 +224,14 @@ if __name__ == '__main__':
 						self.__B['billing'] = test_billing
 						success = self.__check_billing(test_billing)
 						if not success:
-							print(1)
+							print((1))
 							return "end"
 						else:
-							print("INFO:check billing success. billing:%s" % (test_billing))
+							print(("INFO:check billing success. billing:%s" % (test_billing)))
 							self.__message_flow["check billing"]["result"] = True
 					else:
 						print("ERR :not find billing from header:variable_sip_h_P-Access-Network-Info")
-						print(1)
+						print((1))
 						return "end"
 
 			pass 
@@ -285,7 +285,7 @@ if __name__ == '__main__':
 
 			if not options.record:
 				print("ERR : this case is not need record")
-				print(1)
+				print((1))
 				return "end"
 
 			# 检查是否有生成录音文件
@@ -296,42 +296,42 @@ if __name__ == '__main__':
 				ssh = Ssh(options.host)
 				stdin, stdout, stderr = ssh.exec_command('ls -l ' + record_file_path)
 				if not stdout.readlines():
-					print("ERR :check record file not exists. %s" % (record_file_path))
-					print(1)
+					print(("ERR :check record file not exists. %s" % (record_file_path)))
+					print((1))
 				else:
-					print("INFO:check record file exists. %s" % (record_file_path))
-					print(0)
+					print(("INFO:check record file exists. %s" % (record_file_path)))
+					print((0))
 				return "end"
-			except Exception,err:
-				print("ERR :" + str(err))
-				print(1)
+			except Exception as err:
+				print(("ERR :" + str(err)))
+				print((1))
 				return "end"
 
 		def __check_hangup_notify(self, event):
 
 			# SIP Call-ID
 			if event.getHeader("variable_sip_call_id") != self.__A['sip_call_id'][:32]:
-				print("ERR :hangup notify Call-ID check failed... test:%s ref:%s" % (event.getHeader("variable_sip_call_id"), self.__A['sip_call_id']))
+				print(("ERR :hangup notify Call-ID check failed... test:%s ref:%s" % (event.getHeader("variable_sip_call_id"), self.__A['sip_call_id'])))
 				return False
 
 			# APPID
 			if event.getHeader("variable_app_id") != options.appid:
-				print("ERR :hangup notify APPID check failed... test:%s ref:%s" % (event.getHeader("variable_app_id"), options.appid))
+				print(("ERR :hangup notify APPID check failed... test:%s ref:%s" % (event.getHeader("variable_app_id"), options.appid)))
 				return False
 
 			# 主叫号码
 			if event.getHeader("variable_caller_number") != options.anum:
-				print("ERR :hangup notify caller number check failed... test:%s ref:%s" % (event.getHeader("variable_caller_number"), options.anum))
+				print(("ERR :hangup notify caller number check failed... test:%s ref:%s" % (event.getHeader("variable_caller_number"), options.anum)))
 				return False
 
 			# 隐私号码
 			if event.getHeader("variable_private_number") != options.hnum:
-				print("ERR :hangup notify hidden number check failed... test:%s ref:%s" % (event.getHeader("variable_private_number"), options.hnum))
+				print(("ERR :hangup notify hidden number check failed... test:%s ref:%s" % (event.getHeader("variable_private_number"), options.hnum)))
 				return False
 
 			# 被叫号码
 			if event.getHeader("variable_called_number") != options.bnum:
-				print("ERR :hangup notify callee number check failed... test:%s ref:%s" % (event.getHeader("variable_called_number"), options.bnum))
+				print(("ERR :hangup notify callee number check failed... test:%s ref:%s" % (event.getHeader("variable_called_number"), options.bnum)))
 				return False
 
 			# 录音
@@ -347,25 +347,25 @@ if __name__ == '__main__':
 					ref_url = os.path.join(record_url_path, options.accountid, options.appid, self.__B['call_time'][:10], 
 						"%s_%s_%s_CALLIN.mp3" % (options.anum, options.bnum, self.__A['sip_call_id'][:32]))
 					if test_url != ref_url:
-						print("ERR :hangup notify hidden number check failed... test:%s ref:%s" % (test_url, ref_url))
+						print(("ERR :hangup notify hidden number check failed... test:%s ref:%s" % (test_url, ref_url)))
 						return False
 
 			# 通话开始时间
 			start_time = event.getHeader("variable_start_time")
 			if not start_time or start_time == "0":
-				print("ERR :hangup notify start time check failed... time:" + start_time)
+				print(("ERR :hangup notify start time check failed... time:" + start_time))
 				return False
 
 			# 通话结束时间
 			end_time = event.getHeader("variable_end_time")
 			if not end_time or end_time == "0":
-				print("ERR :hangup notify end time check failed... time:" + end_time)
+				print(("ERR :hangup notify end time check failed... time:" + end_time))
 				return False
 
 			# 通话持续时长
 			duration_time = event.getHeader("variable_duration_time")
 			if not duration_time or int(duration_time) <= 0:
-				print("ERR :hangup notify duration time check failed... time:" + duration_time)
+				print(("ERR :hangup notify duration time check failed... time:" + duration_time))
 				return False
 
 			hangup_cause = event.getHeader("variable_sip_hangup_cause")
@@ -393,13 +393,13 @@ if __name__ == '__main__':
 		# 校验整个呼叫过程中的错误
 		def complete_check(self):
 			proc_describe = ""
-			seq = sys.maxint
-			for msg, context in self.__message_flow.items():
+			seq = sys.maxsize
+			for msg, context in list(self.__message_flow.items()):
 				if not context["result"] and context["sequence"] < seq:
 					proc_describe = context["describe"]
 			else:
 				if proc_describe:
-					print("ERR :process '%s' result is not OK" % (proc_describe))
+					print(("ERR :process '%s' result is not OK" % (proc_describe)))
 					return False
 				else:
 					return True
@@ -407,7 +407,7 @@ if __name__ == '__main__':
 	mask = maskEvent(options.host, options.port, options.password)
 	mask.run(options.timeout)
 	if mask.complete_check():
-		print(0)
+		print((0))
 	else:
-		print(1)
+		print((1))
 

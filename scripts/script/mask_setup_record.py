@@ -22,7 +22,7 @@ if __name__ == '__main__':
 	
 	try:
 		ssh = Ssh(options.host, options.port, options.user, options.password)
-		print(0)
+		print((0))
 	except Exception as err:
 		print(err)
-		print(1)
+		print((1))
